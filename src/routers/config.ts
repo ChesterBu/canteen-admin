@@ -36,10 +36,34 @@ export const config: IRoute[] = [
             component: lazy(()=> import('../layout/BasicLayout')), // 基本布局
             childRoutes: [
                 {
-                  path: '/home',
-                  name: '首页',
-                  icon: getIcon('SmileOutlined'),
-                  component: lazy(() => import('../pages/Home')),
+                    path: '/home',
+                    name: '首页',
+                    icon: getIcon('HomeOutlined'),
+                    component: lazy(() => import('../pages/Home')),
+                },
+                {
+                    path: '/goods',
+                    name: '商品列表',
+                    icon: getIcon('TaobaoCircleOutlined'),
+                    component: lazy(() => import('../pages/Home')),
+                },
+                {
+                    path: '/orders',
+                    name: '订单列表',
+                    icon: getIcon('AppstoreOutlined'),
+                    component: lazy(() => import('../pages/Home')),
+                },
+                {
+                    path: '/inventories',
+                    name: '库存列表',
+                    icon: getIcon('DropboxOutlined'),
+                    component: lazy(() => import('../pages/Home')),
+                },
+                {
+                    path: '/cart',
+                    name: '购物车',
+                    icon: getIcon('ShoppingCartOutlined'),
+                    component: lazy(() => import('../pages/Home')),
                 },
             ]
         }]

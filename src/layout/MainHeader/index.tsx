@@ -20,11 +20,6 @@ const Logout = ({ run, history }) => {
 
     return  (
         <Menu>
-            <Menu.Item key="0">
-                <SmileOutlined />
-                &nbsp; 个人信息
-            </Menu.Item>
-            <Menu.Divider />
             <Menu.Item key="1">
                 <span onClick = { Logout }>
                     <LogoutOutlined />

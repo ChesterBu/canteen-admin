@@ -1,5 +1,5 @@
 declare global {
-    type Res = {
+    export type Res = {
         errorCode: number
         errorMsg: string
         data: any

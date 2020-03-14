@@ -3,15 +3,12 @@ import { Tabs } from 'antd';
 const { TabPane } = Tabs;
 import './index.less';
 
-const Home = () => {
-  function callback(key) {
-    console.log(key);
-  }
+const Order = () => {
   return( 
     <div className="page-content">
-      1111
+      Order
     </div>
   )
 };
 
-export default Home;
+export default Order;

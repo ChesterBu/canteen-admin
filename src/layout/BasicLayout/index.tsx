@@ -15,7 +15,6 @@ const BasicLayout = ({ route, children }) => {
         <MainHeader />
         <Layout.Content className="main-layout-content">
           { children }
-          {/* <MainFooter></MainFooter> */}
         </Layout.Content>
       </Layout>
     </Layout>

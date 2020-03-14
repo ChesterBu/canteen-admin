@@ -3,6 +3,12 @@ export type TUser = {
     role: 1 | 2 | 3 | 4   // 1-4 食堂，供应商，财务部，管理员
 }
 
+enum AppTitle {
+    "食堂系统" = 1,
+    "供应商系统" = 2,
+    "财务部系统" = 3,
+    "管理员系统" = 4
+}
 
 
 export function createStore () {
@@ -23,6 +29,9 @@ export function createStore () {
         },
         get role () {
             return this.user.role
+        },
+        get appTitle () {
+            return AppTitle[this.role || 1]
         }
     }
 }

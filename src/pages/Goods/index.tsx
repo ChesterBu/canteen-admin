@@ -1,17 +1,15 @@
 import React from 'react';
-import { Tabs } from 'antd';
-const { TabPane } = Tabs;
 import './index.less';
 
-const Home = () => {
+const Goods = () => {
   function callback(key) {
     console.log(key);
   }
   return( 
     <div className="page-content">
-      1111
+      Goods
     </div>
   )
 };
 
-export default Home;
+export default Goods;

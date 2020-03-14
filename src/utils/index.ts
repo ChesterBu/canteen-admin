@@ -1,4 +1,4 @@
-export const useCookie = (cookie="user_id") => {
+export const useCookie = (cookie="user_id"): string | undefined => {
     let pattern = /([^=]+)=([^;]+);?\s*/g,
         result,
         value = {};

@@ -3,15 +3,12 @@ import { Tabs } from 'antd';
 const { TabPane } = Tabs;
 import './index.less';
 
-const Home = () => {
-  function callback(key) {
-    console.log(key);
-  }
+const ShoppingCart = () => {
   return( 
     <div className="page-content">
-      1111
+      ShoppingCart
     </div>
   )
 };
 
-export default Home;
+export default ShoppingCart;

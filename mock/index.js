@@ -17,7 +17,7 @@ module.exports = (app) => {
 			ret: true,
 		})
 	});
-	app.get('/dining/info', (req, res) => {
+	app.get('/api/:type/info', (req, res) => {
 		res.json({
 			errorCode: 1,
 			errorMsg: '',

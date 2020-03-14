@@ -9,12 +9,13 @@ export default function BlankLayout ({ children }) {
     const history = useHistory()
     useEffect(()=>{
         const account = useCookie(ACCOUNT)
-        if (!!account){
-            store.setAccount(account)
-            history.push('/')
-        } else {
-            history.push('/login') 
-        }
+        // if (!!account){
+        //     store.setAccount(account)
+        //     history.push('/')
+        // } else {
+        //     history.push('/login') 
+        // }
+        history.push('/home')
     },[document.cookie])
     return (
         <div style = { { height:'100vh'} }>
