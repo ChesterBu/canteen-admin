@@ -1,6 +1,4 @@
 import React from 'react';
-import { Tabs } from 'antd';
-const { TabPane } = Tabs;
 import './index.less';
 
 const Order = () => {
