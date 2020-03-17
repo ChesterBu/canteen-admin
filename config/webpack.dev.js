@@ -14,15 +14,15 @@ module.exports = merge(commonConfig, {
     open: true,
     historyApiFallback: true,
     compress: true,
-    before: (app) => mock(app),
-    // proxy: {
-    //   '/api/*': {
-    //     target: 'http://192.168.2.160:8080',
-    //     changeOrigin: true,
-    //     secure: false,
-    //     pathRewrite: { '^/api': '' },
-    //   },
-    // },
+    // before: (app) => mock(app),
+    proxy: {
+      '/api/*': {
+        target: 'http://192.168.2.160:8080',
+        changeOrigin: true,
+        secure: false,
+        pathRewrite: { '^/api': '' },
+      },
+    },
   },
   devtool: "source-map",
   module: {
