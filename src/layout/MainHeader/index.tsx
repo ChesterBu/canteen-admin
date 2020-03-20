@@ -3,7 +3,7 @@ import { Layout, Dropdown, Menu, Row, Col, message } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useObserver } from 'mobx-react';
 import { useStore } from '../../store/index';
-import { SmileOutlined, LogoutOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
+import { LogoutOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import './index.less'
 import useRequest from '@umijs/use-request';
 
@@ -39,14 +39,14 @@ const MainHeader = () => {
     return useObserver( ()=> (
       <Layout.Header className="main-header">
         <Row style={{ paddingRight: 20 }}>
-          <Col style={{ flex: 1 }}>
-                <span onClick={store.toggle}>
-                    {
-                      store.collapsed ? <MenuUnfoldOutlined className="trigger" /> : <MenuFoldOutlined  className="trigger"/>
-                    }
-                </span>
+          <Col flex="auto">
+            <span onClick={store.toggle}>
+                {
+                  store.collapsed ? <MenuUnfoldOutlined className="trigger" /> : <MenuFoldOutlined  className="trigger"/>
+                }
+            </span>
           </Col>
-          <Col>
+          <Col flex="30px">
             <Dropdown overlay={ <Logout run={ run } history = { history} /> } trigger={['click', 'hover']} placement="bottomCenter">
               <div className="user-info">
                 <span className="user-img" />

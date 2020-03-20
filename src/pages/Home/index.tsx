@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import './index.less';
 import useRequest from '@umijs/use-request';
-import { Table, Tabs, Tag, Button } from 'antd';
+import { Table, Tabs, Tag, Button, Row, Col } from 'antd';
+import { useHistory } from 'react-router-dom';
 const { TabPane } = Tabs;
 
 
@@ -57,22 +58,34 @@ const columns = [
 ];
 
 
-const tables = ['diningRooms','finances','suppliers']
+const tables = ['食堂','财务部','供应商']
 
-const InfoPane = ({ i }) => {
-  const { data, run , loading } = useRequest((params) => ({
+const InfoPane = ({ name, i }) => {
+  const { data, run, loading } = useRequest((params) => ({
     url: '/api/admin/account/all',
     method: 'get',
     params,
   }),{
     manual:true
   })
+  const history = useHistory()
   useEffect(()=>{
       run({ role: i + 1 })
   },[])
+  console.log(1)
   return(
     <>
-      <Button type="primary" style={{ float: 'right' }}>添加账户</Button>
+      <Row className="query">
+        <Col  flex="auto"></Col>
+        <Col  flex="88px">
+          <Button
+            type="primary" 
+            onClick ={ () => { history.push('/access',{ role: i + 1 }) } }
+          > 
+            添加{ name }
+          </Button>
+        </Col>
+      </Row>
       <Table
         rowKey={ (_,index) => index }
         loading={ loading } 
@@ -95,6 +108,7 @@ const Home = () => {
             <InfoPane 
               key= { i }
               i = { i }
+              name = { v }
             />
           </TabPane>
         ))

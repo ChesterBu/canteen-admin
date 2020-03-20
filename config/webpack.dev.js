@@ -3,7 +3,7 @@ const merge = require('webpack-merge');
 // const path = require('path');
 
 const commonConfig = require('./webpack.common');
-const mock = require('../mock')
+// const mock = require('../mock')
 
 module.exports = merge(commonConfig, {
   mode: 'development',

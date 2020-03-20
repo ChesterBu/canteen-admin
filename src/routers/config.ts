@@ -10,6 +10,8 @@ export interface IRoute {
     path: string
     component: FC<any> | LazyExoticComponent<FC<any>>
     childRoutes?: IRoute[]
+    // 注释
+    comment?:string
 }
 
 const getIcon = (type: string) => lazy(async () => {
@@ -37,9 +39,15 @@ export const config: IRoute[] = [
             childRoutes: [
                 {
                     path: '/home',
-                    name: '首页',
+                    exact: true,
+                    name: '账号信息管理',
                     icon: getIcon('HomeOutlined'),
                     component: lazy(() => import('../pages/Home')),
+                },
+                {
+                    path: '/access',
+                    comment: '接入',
+                    component: lazy(() => import('../pages/Access')),
                 },
                 {
                     path: '/goods',
