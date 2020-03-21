@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ memo } from 'react';
 import './index.less';
 import { Button,Row,Col } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons'
@@ -15,7 +15,7 @@ const BreadNav = ({ title, confirm, loading }) => {
                 </a>
                 <span className="bread-title">{ title }</span>
             </Col>
-            <Col flex="150px" className="header-button">
+            <Col flex="180px" className="header-button">
                 <Button type="primary" onClick = { confirm } loading={ loading }>
                     确定
                 </Button>
@@ -25,7 +25,6 @@ const BreadNav = ({ title, confirm, loading }) => {
             </Col>
         </Row>
     )
-    
 }
 
-export default BreadNav
+export default memo(BreadNav) 

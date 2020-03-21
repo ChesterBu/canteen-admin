@@ -3,17 +3,9 @@ import './index.less';
 import useRequest from '@umijs/use-request';
 import { Table, Tabs, Tag, Button, Row, Col } from 'antd';
 import { useHistory } from 'react-router-dom';
+import { STATUS, STATUSCOLOR } from '../../const';
 const { TabPane } = Tabs;
 
-
-enum STATUS {
-  '正常' = 1,
-  '删除' = 2
-}
-enum STATUSCOLOR {
-  'success' = 1,
-  'error' = 2
-}
 
 const columns = [
   {
@@ -58,7 +50,7 @@ const columns = [
 ];
 
 
-const tables = ['食堂','财务部','供应商']
+const tables = ['食堂','供应商','财务部']
 
 const InfoPane = ({ name, i }) => {
   const { data, run, loading } = useRequest((params) => ({
@@ -72,7 +64,6 @@ const InfoPane = ({ name, i }) => {
   useEffect(()=>{
       run({ role: i + 1 })
   },[])
-  console.log(1)
   return(
     <>
       <Row className="query">
@@ -98,7 +89,6 @@ const InfoPane = ({ name, i }) => {
 
 
 const Home = () => {
-  
   return( 
     <div className="page-content">
       <Tabs defaultActiveKey="0" >

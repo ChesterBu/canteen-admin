@@ -39,8 +39,7 @@ export const config: IRoute[] = [
             childRoutes: [
                 {
                     path: '/home',
-                    exact: true,
-                    name: '账号信息管理',
+                    name: '账号管理',
                     icon: getIcon('HomeOutlined'),
                     component: lazy(() => import('../pages/Home')),
                 },
@@ -48,6 +47,12 @@ export const config: IRoute[] = [
                     path: '/access',
                     comment: '接入',
                     component: lazy(() => import('../pages/Access')),
+                },
+                {
+                    path: '/inventories',
+                    name: '物资管理',
+                    icon: getIcon('DropboxOutlined'),
+                    component: lazy(() => import('../pages/Inventory')),
                 },
                 {
                     path: '/goods',
@@ -59,12 +64,6 @@ export const config: IRoute[] = [
                     path: '/orders',
                     name: '订单列表',
                     icon: getIcon('AppstoreOutlined'),
-                    component: lazy(() => import('../pages/Home')),
-                },
-                {
-                    path: '/inventories',
-                    name: '库存列表',
-                    icon: getIcon('DropboxOutlined'),
                     component: lazy(() => import('../pages/Home')),
                 },
                 {
