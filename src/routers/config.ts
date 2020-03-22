@@ -44,8 +44,8 @@ export const config: IRoute[] = [
                     component: lazy(() => import('../pages/Home')),
                 },
                 {
+                    // 接入页面
                     path: '/access',
-                    comment: '接入',
                     component: lazy(() => import('../pages/Access')),
                 },
                 {
@@ -64,7 +64,7 @@ export const config: IRoute[] = [
                     path: '/orders',
                     name: '订单管理',
                     icon: getIcon('AppstoreOutlined'),
-                    component: lazy(() => import('../pages/Home')),
+                    component: lazy(() => import('../pages/Order')),
                 },
                 {
                     path: '/cart',
