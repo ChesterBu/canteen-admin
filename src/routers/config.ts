@@ -56,13 +56,13 @@ export const config: IRoute[] = [
                 },
                 {
                     path: '/goods',
-                    name: '商品列表',
+                    name: '采购管理',
                     icon: getIcon('TaobaoCircleOutlined'),
-                    component: lazy(() => import('../pages/Home')),
+                    component: lazy(() => import('../pages/Goods')),
                 },
                 {
                     path: '/orders',
-                    name: '订单列表',
+                    name: '订单管理',
                     icon: getIcon('AppstoreOutlined'),
                     component: lazy(() => import('../pages/Home')),
                 },

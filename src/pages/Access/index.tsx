@@ -1,4 +1,4 @@
-import React, { useEffect,useCallback, memo } from 'react';
+import React, { useCallback, memo } from 'react';
 import './index.less';
 import { Button, Form, Input, InputNumber, TimePicker, Select, message, notification} from 'antd'
 import { MinusCircleOutlined,PlusOutlined } from '@ant-design/icons'
@@ -6,6 +6,7 @@ import useRequest from '@umijs/use-request';
 import { useHistory } from 'react-router-dom';
 import BreadNav from '../../components/BreadNav';
 import moment from 'moment'
+import { ROLENAME } from '../../const';
 const { RangePicker } = TimePicker;
 const { Option } = Select;
 const { TextArea } = Input;
@@ -186,7 +187,7 @@ const AccessForm = memo<{ form: any, run:any, role:any }>(({ form, run, role }) 
       const res = await role2Submit[role](value)
       if (res.ret) {
         notification.success({
-          message:`${ROLE[role]}:${value.name}添加成功`,
+          message:`${ROLENAME[role]}:${value.name}添加成功`,
           description:
             `账号为${res.data.account}\n密码为:${res.data.password}`,
           onClose: history.goBack
@@ -204,7 +205,7 @@ const AccessForm = memo<{ form: any, run:any, role:any }>(({ form, run, role }) 
       initialValues = {{ businessTime:[{}] }}
     >
       <Form.Item
-        label={`${ROLE[role]}名称`}
+        label={`${ROLENAME[role]}名称`}
         name="name"
         rules={[{ required: true, message: '' }]}
       >
@@ -263,11 +264,7 @@ const AccessForm = memo<{ form: any, run:any, role:any }>(({ form, run, role }) 
   )
 })
 
-enum ROLE {
-  '食堂' = 1,
-  '供应商' = 2,
-  '财务部' = 3
-}
+
 
 const role2Api = [,'dining', 'supplier', 'finance']
 
@@ -285,7 +282,7 @@ const Access = () => {
   })
   return( 
     <div className="page-content">
-      <BreadNav title={`申请${ROLE[role]}`} confirm = { confirm }  loading = { loading }/>
+      <BreadNav title={`申请${ROLENAME[role]}`} confirm = { confirm }  loading = { loading }/>
       <main className="form-content">
         <AccessForm  form={ form }  run = { run }  role = { role }/>
       </main>  

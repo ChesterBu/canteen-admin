@@ -28,7 +28,7 @@ export function createStore () {
             this.user.account = account
         },
         get role () {
-            return this.user.role
+            return this.user.role ?? 2
         },
         get appTitle () {
             return AppTitle[this.role || 1]

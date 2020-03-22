@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Layout, Menu, Row } from 'antd';
 import { useStore } from '../../store/index';
@@ -12,7 +12,7 @@ const renderMenuItem = (target: IRoute[]) =>{
     return useObserver( () => (
         target
         .filter( i => i.path && i.name)
-        .filter( i => i.role === store.role)
+        // .filter( i => i.role === store.role)
         .map( subMenu => (
             <Menu.Item key={ subMenu.path }>
                 <Link to={ subMenu.path }>

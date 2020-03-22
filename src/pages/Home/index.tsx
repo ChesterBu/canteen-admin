@@ -39,7 +39,7 @@ const columns = [
     title: 'Action',
     key: 'action',
     width: 200,
-    render: (text, record) => (
+    render: (_, record) => (
       <span>
         <a style={{ marginRight: 16 }}>详情</a>
         { record.status === 1 && <a style={{ marginRight: 16 }}>删除</a> }
