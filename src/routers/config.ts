@@ -67,10 +67,10 @@ export const config: IRoute[] = [
                     component: lazy(() => import('../pages/Order')),
                 },
                 {
-                    path: '/cart',
-                    name: '购物车',
-                    icon: getIcon('ShoppingCartOutlined'),
-                    component: lazy(() => import('../pages/Home')),
+                    path: '/audit',
+                    name: '审批订单',
+                    icon: getIcon('SlidersOutlined'),
+                    component: lazy(() => import('../pages/Audit')),
                 },
             ]
         }]

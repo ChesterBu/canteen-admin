@@ -4,8 +4,11 @@ import useRequest from '@umijs/use-request';
 import { Table, Tag, Button, Popconfirm, InputNumber } from 'antd';
 import { ORDERSTATUS, ORDERCOLOR } from '../../const';
 import moment from 'moment';
-import { useStore } from '../../store/index';
 import { CheckCircleTwoTone } from '@ant-design/icons';
+import { useStore } from '../../store/index';
+
+
+
 
 
 let columns: any[] = [
@@ -19,7 +22,7 @@ let columns: any[] = [
   {
     title: '物资名称',
     dataIndex: 'orderItems',
-    width: 200,
+    width: 100,
     render: orderItems => <span> { orderItems?.goodDto?.goodName }</span>
   },
   {
@@ -54,7 +57,7 @@ let columns: any[] = [
   {
     title: '下单时间',
     dataIndex: 'createTime',
-    width: 200,
+    width: 180,
     render: createTime => <span> { moment(createTime).format('YYYY-MM-DD')}</span>
   },
   {
@@ -71,6 +74,7 @@ let columns: any[] = [
 ];
 
 const Order = () => {
+  const { role } = useStore();
   const { data, loading, run: fetchList } = useRequest((params) => ({
     url: `/api/order/all`,
     method: 'get',
@@ -154,7 +158,6 @@ const Order = () => {
       }
     }
   ]
-  const role = 1 
   useEffect(()=>{
     if ( role === 1) {
       columns = [diningCol[0], ...columns, diningCol[1]]
