@@ -1,4 +1,4 @@
-import React,{ useState, memo } from 'react';
+import React,{ useState, memo, useEffect } from 'react';
 import './index.less';
 import useRequest from '@umijs/use-request';
 import { Table, Tag, Button, Row, Col, Modal, Form, Input, InputNumber, Select, notification, message } from 'antd';
@@ -6,6 +6,7 @@ import { STATUSCOLOR, STATUS, ROLEMAP } from '../../const';
 import moment from 'moment';
 import { useStore } from '../../store/index';
 const { Option } = Select;
+const { Search } = Input;
 
 export const columns = [
   {
@@ -79,9 +80,9 @@ const InventoryAdd = memo<{ visible:boolean, toggle: Function, refresh: Function
     params,
   }),{
     debounceInterval: 500,
-    manual:true
+    manual: true,
+    formatResult: (res) => res.data,
   })
-  const option = data?.data?.data ?? []
   const getGoodInfo = value => {
       getGood({
         goodNo:value
@@ -114,6 +115,7 @@ const InventoryAdd = memo<{ visible:boolean, toggle: Function, refresh: Function
         visible={ visible }
         onOk={ form.submit }
         onCancel={ () => toggle(false) }
+        destroyOnClose={ true }
     >
       <Form
         name="basic"
@@ -141,7 +143,7 @@ const InventoryAdd = memo<{ visible:boolean, toggle: Function, refresh: Function
                 notFoundContent={ null }
               >
                 { 
-                  option.map(d => <Option key={ d.goodNo } value={ d.goodNo } data= { d } >{ d.goodNo }</Option>)
+                  data?.data?.map(d => <Option key={ d.goodNo } value={ d.goodNo } data= { d } >{ d.goodNo }</Option>)
                 }
               </Select>
             </Form.Item>
@@ -179,7 +181,6 @@ const InventoryAdd = memo<{ visible:boolean, toggle: Function, refresh: Function
                 </Form.Item>
             </>
           }
-
       </Form>
     </Modal>
   )
@@ -188,16 +189,37 @@ const InventoryAdd = memo<{ visible:boolean, toggle: Function, refresh: Function
 
 const InventoryList = () => {
   const { role } = useStore()
-  const { data, loading, run } = useRequest((params) => ({
+  const [ goodName, setGoodName ] = useState('');
+  const [ goodNo, setGoodNo ] = useState('');
+  const { data, loading, run, pagination } = useRequest((params) => ({
     url: `/api/good/${ROLEMAP[role]}/all`,
     method: 'get',
-    params,
-  }))
+    params:{
+      ...params,
+      goodName,
+      goodNo
+    },
+  }),{
+    refreshDeps:[ goodName,goodNo ],
+    paginated: true,
+    formatResult: (res) => res.data,
+  })
   const [ visible, toggle] = useState(false)
   return(
     <>
       <Row style={ { marginBottom: 16 } }>
-        <Col  flex="auto"></Col>
+        <Col  flex="auto">
+          <Search
+              placeholder="输入物资名称查找"
+              onSearch={ value => setGoodName(value) }
+              style={{ width: 200 }}
+          />
+          <Search
+              placeholder="输入物资编号查找"
+              onSearch={ value => setGoodNo(value) }
+              style={{ width: 200, marginLeft: 20 }}
+          />
+        </Col>
         <Col  flex="88px">
           <Button
             type="primary" 
@@ -211,7 +233,8 @@ const InventoryList = () => {
         rowKey={ (_,index) => index }
         loading={ loading } 
         columns={ columns.concat(role === 2 ? supplierCol : [],actionCol) }
-        dataSource = { data?.data?.data } 
+        dataSource = { data?.data } 
+        pagination = { pagination }
       />
       <InventoryAdd  visible = { visible } toggle = { toggle } refresh = { run } />
     </>

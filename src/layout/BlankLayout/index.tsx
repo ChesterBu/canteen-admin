@@ -15,7 +15,7 @@ export default function BlankLayout ({ children }) {
         // } else {
         //     history.push('/login') 
         // }
-        history.push('/home')
+        history.push('/account')
     },[document.cookie])
     return (
         <div style = { { height:'100vh'} }>

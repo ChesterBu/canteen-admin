@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import './index.less';
 import useRequest from '@umijs/use-request';
-import { Table, Tabs, Tag, Button, Row, Col } from 'antd';
+import { Table, Tabs, Tag, Button, Row, Col, Input } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { STATUS, STATUSCOLOR } from '../../const';
 const { TabPane } = Tabs;
-
+const { Search } = Input;
 
 const columns = [
   {
@@ -41,9 +41,7 @@ const columns = [
     width: 200,
     render: (_, record) => (
       <span>
-        <a style={{ marginRight: 16 }}>详情</a>
         { record.status === 1 && <a style={{ marginRight: 16 }}>删除</a> }
-        <a>修改</a>
       </span>
     ),
   },
@@ -53,21 +51,32 @@ const columns = [
 const tables = ['食堂','供应商','财务部']
 
 const InfoPane = ({ name, i }) => {
-  const { data, run, loading } = useRequest((params) => ({
+  const [ account, setAccount ] = useState('');
+  const { data, loading, pagination } = useRequest((params) => ({
     url: '/api/admin/account/all',
     method: 'get',
-    params,
+    params:{
+      ...params,
+      account,
+      role: i + 1 
+    },
   }),{
-    manual:true
+    paginated: true,
+    refreshDeps:[ account ],
+    defaultPageSize: 15,
+    formatResult: (res) => res.data,
   })
   const history = useHistory()
-  useEffect(()=>{
-      run({ role: i + 1 })
-  },[])
   return(
     <>
       <Row className="query">
-        <Col  flex="auto"></Col>
+        <Col  flex="auto">
+        <Search
+            placeholder="输入账号查找"
+            onSearch={ value => setAccount(value) }
+            style={{ width: 200 }}
+          />
+        </Col>
         <Col  flex="88px">
           <Button
             type="primary" 
@@ -81,14 +90,15 @@ const InfoPane = ({ name, i }) => {
         rowKey={ (_,index) => index }
         loading={ loading } 
         columns={ columns }
-        dataSource = { data?.data } 
+        pagination = { pagination }
+        dataSource = { data?.data }
       />
     </>
   )
 }
 
 
-const Home = () => {
+const Account = () => {
   return( 
     <div className="page-content">
       <Tabs defaultActiveKey="0" >
@@ -108,4 +118,4 @@ const Home = () => {
   )
 };
 
-export default Home;
+export default Account;

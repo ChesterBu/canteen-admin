@@ -38,10 +38,10 @@ export const config: IRoute[] = [
             component: lazy(()=> import('../layout/BasicLayout')), // 基本布局
             childRoutes: [
                 {
-                    path: '/home',
+                    path: '/account',
                     name: '账号管理',
                     icon: getIcon('HomeOutlined'),
-                    component: lazy(() => import('../pages/Home')),
+                    component: lazy(() => import('../pages/Account')),
                 },
                 {
                     // 接入页面

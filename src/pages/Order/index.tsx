@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './index.less';
 import useRequest from '@umijs/use-request';
-import { Table, Tag, Button, Popconfirm, InputNumber } from 'antd';
+import { Table, Tag, Button, Popconfirm, InputNumber, Row, Col, Input } from 'antd';
 import { ORDERSTATUS, ORDERCOLOR } from '../../const';
 import moment from 'moment';
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import { useStore } from '../../store/index';
-
-
+const { Search } = Input 
 
 
 
@@ -75,11 +74,20 @@ let columns: any[] = [
 
 const Order = () => {
   const { role } = useStore();
-  const { data, loading, run: fetchList } = useRequest((params) => ({
+  const [ orderNo, setOrderNo ] = useState('');
+  const { data, loading, run: fetchList, pagination } = useRequest((params) => ({
     url: `/api/order/all`,
     method: 'get',
-    params,
-  }))
+    params:{
+      ...params,
+      orderNo,
+    },
+  }),{
+    refreshDeps:[ orderNo ],
+    paginated: true,
+    formatResult: (res) => res.data,
+  })
+  
   const supplierCol = [
     {
       title: '食堂名称',
@@ -170,12 +178,22 @@ const Order = () => {
   },[])
   return( 
     <div className="page-content">
+      <Row style={ { marginBottom: 16 } }>
+        <Col  flex="auto">
+          <Search
+              placeholder="输入订单名称查找"
+              onSearch={ value => setOrderNo(value) }
+              style={{ width: 200 }}
+          />
+        </Col>
+      </Row>
       <Table
         rowKey={ (_,index) => index }
         loading={ loading } 
         columns={ columns }
         scroll={{ x: 1300 }}
-        dataSource = { data?.data?.data } 
+        dataSource = { data?.data }
+        pagination = { pagination }
       />
     </div>
   )
