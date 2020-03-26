@@ -86,7 +86,7 @@ function Password({ visible, toggle }) {
 
 const Logout = ({ run, history }) => {
     const logout = async () => {
-        const res = await run()
+        await run()
         history.push('/')
     }
     const [visible, toggle] = useState(false)

@@ -51,7 +51,7 @@ export const supplierCol = [
   },
 ]
 
-const InventoryAdd = memo<{ visible: boolean, toggle: Function, refresh: Function, create: boolean  }>(( { visible, toggle, refresh, create } ) => {
+const InventoryAdd = memo<{ visible: boolean, toggle: Function,create: boolean, goodNo: string  }>(( { visible, toggle, create, goodNo } ) => {
   const { role } = useStore()
   const [ form ] = Form.useForm();
   const { run } = useRequest(data => ({
@@ -76,13 +76,15 @@ const InventoryAdd = memo<{ visible: boolean, toggle: Function, refresh: Functio
       })
   }
   const onFinish = async value =>{
+    if (!create) value = { ...value, goodNo }
     let res = await run(value)
     if (res.ret) {
-      notification.success({
-        message:`物资:${value.goodName}添加成功`,
-        description: `编号为${res.data}`,
-      });
-      refresh()
+      if(create){
+        notification.success({
+          message:`物资:${value.goodName}添加成功`,
+          description: `编号为${res.data}`,
+        });
+      }
       toggle(false)
     } else {
       message.error(res.errorMsg, 2)
@@ -98,7 +100,7 @@ const InventoryAdd = memo<{ visible: boolean, toggle: Function, refresh: Functio
   
   return (
     <Modal
-        title="添加物资"
+        title={`${create ? '添加': '修改'}物资`}
         visible={ visible }
         onOk={ form.submit }
         onCancel={ () => toggle(false) }
@@ -184,6 +186,8 @@ const InventoryList = () => {
   const [ goodName, setGoodName ] = useState('');
   const [ goodNo, setGoodNo ] = useState('');
   const [ create, toggleMode ] = useState(true)
+  const [ modeId, setModeId ] = useState('')
+  const [ visible, toggle] = useState(false)
   const { data, loading, run, pagination } = useRequest((params) => ({
     url: `/api/good/${ROLEMAP[role]}/all`,
     method: 'get',
@@ -193,17 +197,19 @@ const InventoryList = () => {
       goodNo
     },
   }),{
-    refreshDeps:[ goodName,goodNo ],
+    refreshDeps:[ goodName, goodNo ],
     paginated: true,
     formatResult: (res) => res.data,
   })
+  useEffect(()=>{
+    !visible && run(null)
+  },[visible])
   const { run: remove } = useRequest((goodNo) => ({
     url: `/api/good/${ROLEMAP[role]}/remove/${goodNo}`,
     method: 'delete',
   }),{
     manual:true
   })
-  const [ visible, toggle] = useState(false)
   const actionCol = [
     {
       title: '操作',
@@ -215,6 +221,7 @@ const InventoryList = () => {
             <a style={{ marginRight: 16 }} onClick ={ () => remove(record.goodNo).then(() => run(null)) }>删除</a>
             { role === 2 &&  <a style={{ marginRight: 16 }} onClick ={ 
                 () => {
+                  setModeId(record.goodNo)
                   toggleMode(false)
                   toggle(true)
                 }
@@ -258,8 +265,8 @@ const InventoryList = () => {
       <InventoryAdd  
         visible = { visible } 
         toggle = { toggle } 
-        refresh = { run } 
         create = { create }
+        goodNo = { modeId }
       />
     </>
   )
