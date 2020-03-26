@@ -12,7 +12,7 @@ const renderMenuItem = (target: IRoute[]) =>{
     return useObserver( () => (
         target
         .filter( i => i.path && i.name)
-        // .filter( i => i.role === store.role)
+        .filter( i => i.role.includes(+store.role))
         .map( subMenu => (
             <Menu.Item key={ subMenu.path }>
                 <Link to={ subMenu.path }>

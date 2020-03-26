@@ -1,5 +1,3 @@
-export const ACCOUNT = "principalMan";
-
 
 export enum STATUS {
     '正常' = 1,
@@ -28,11 +26,16 @@ export enum STATUSCOLOR {
 export enum ROLEMAP {
     'dining' = 1,
     'supplier' = 2,
-    'admin' = 3
+    'admin' = 4
 }
 
 export enum ROLENAME {
     '食堂' = 1,
     '供应商' = 2,
     '财务部' = 3
+}
+
+export enum PAYSTATUS {
+    '未结算' = 1,
+    '已结算' = 2
 }

@@ -24,14 +24,11 @@ export function createStore () {
         get account() {
             return this.user.account
         },
-        setAccount (account) {
-            this.user.account = account
-        },
         get role () {
-            return this.user.role ?? 2
+            return this.user.role
         },
         get appTitle () {
-            return AppTitle[this.role || 1]
+            return AppTitle[this.role]
         }
     }
 }

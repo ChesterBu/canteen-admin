@@ -1,9 +1,14 @@
-export const useCookie = (cookie="user_id"): string | undefined => {
+import { TUser } from '../store/createStore';
+
+export const useCookie = (): TUser => {
     let pattern = /([^=]+)=([^;]+);?\s*/g,
         result,
         value = {};
     while((result = pattern.exec(document.cookie)) != null) {
         value[result[1]] = result[2];
     }
-    return value[cookie];
+    return {
+        account: value['principalMan'],
+        role: Number(value['user_role']) as any 
+    }
 }

@@ -2,15 +2,13 @@ import React, { useEffect, useState } from 'react';
 import './index.less';
 import useRequest from '@umijs/use-request';
 import { Table, Tag, Button, Row, Col, notification, message, Input, Select} from 'antd';
-import { ORDERSTATUS, ORDERCOLOR } from '../../const';
+import { ORDERSTATUS, ORDERCOLOR,PAYSTATUS } from '../../const';
 import moment from 'moment';
 const { Search } = Input;
 const { Option } = Select;
 
-enum PAYSTATUS {
-  '未结算' = 1,
-  '已结算' = 2
-}
+
+
 
 const columns: any[] = [
   {
@@ -119,7 +117,7 @@ const Audit = () => {
     supplierId: '',
     status: '',
   });
-  const { data, loading, run,pagination } = useRequest(params => ({
+  const { data, loading, run, pagination } = useRequest(params => ({
     url: `/api/order/all`,
     method: 'get',
     params:{
@@ -139,20 +137,22 @@ const Audit = () => {
     manual: true
   })
   const [ number, setNumber] = useState(0)
-  const [ selectedRows, setSelect ] = useState([])
-  const onChange = (_, selectedRows: any[]) => {
+  const [ selectedRowKeys, setSelect ] = useState([])
+  const onChange = (selectedRowKeys, selectedRows: any[]) => {
+    setSelect(selectedRowKeys);
     setNumber(selectedRows.reduce((prev,cur)=> prev + cur.totalAmount, 0))
-    setSelect(selectedRows)
   }
   const settle = async () => {
     let res  =  await pay({
-      orders: selectedRows.map(i => i.orderNo).join(',')
+      orders: selectedRowKeys.join(',')
     })
     if (res.ret) {
       notification.success({
         message:`结算成功`
       });
       run(null)
+      setSelect([])
+      setNumber(0)
     } else {
       message.error(res.errorMsg, 2)
     }
@@ -166,7 +166,7 @@ const Audit = () => {
                 ...query,
                 orderNo: value
               }) }
-              style={{ width: 200, marginLeft:10 }}
+              style={{ width: 200 }}
         />
         <Search
               placeholder="输入食堂ID查找"
@@ -205,7 +205,7 @@ const Audit = () => {
             </span>
           </h1>
         </Col>
-        <Col  flex="88px">
+        <Col  flex="68px">
           <Button
             type="primary" 
             onClick = { settle }
@@ -218,9 +218,10 @@ const Audit = () => {
         rowSelection={{
           type: 'checkbox',
           onChange,
+          selectedRowKeys,
           ...rowSelection,
         }}
-        rowKey={ (_,index) => index }
+        rowKey={ row => row.orderNo }
         loading={ loading } 
         columns={ columns }
         scroll={{ x: 1300 }}

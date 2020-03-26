@@ -85,13 +85,9 @@ function Password({ visible, toggle }) {
 
 
 const Logout = ({ run, history }) => {
-    const Logout = async () => {
-        const res: Res = await run()
-        if (res.ret) {
-            history.push('/')
-        } else {
-            message.error(res.errorMsg)
-        }
+    const logout = async () => {
+        const res = await run()
+        history.push('/')
     }
     const [visible, toggle] = useState(false)
 
@@ -105,7 +101,7 @@ const Logout = ({ run, history }) => {
                 </span>
             </Menu.Item>
             <Menu.Item key="2">
-                <span onClick = { Logout }>
+                <span onClick = { () => logout() }>
                     <LogoutOutlined />
                     &nbsp; 退出登录
                 </span>
@@ -132,7 +128,7 @@ const MainHeader = () => {
                 }
             </span>
           </Col>
-          <Col flex="30px">
+          <Col flex="120px">
             <Dropdown overlay={ <Logout run={ run } history = { history} /> } trigger={['click', 'hover']} placement="bottomCenter">
               <div className="user-info">
                 <span className="user-img" />

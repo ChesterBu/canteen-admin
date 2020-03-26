@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './index.less';
 import useRequest from '@umijs/use-request';
-import { Table, Tag, Button, Popconfirm, InputNumber, Row, Col, Input, Select } from 'antd';
-import { ORDERSTATUS, ORDERCOLOR } from '../../const';
+import { Table, Tag, Button, Popconfirm, InputNumber, Row, Col, Input, Select, message } from 'antd';
+import { ORDERSTATUS, ORDERCOLOR, PAYSTATUS } from '../../const';
 import moment from 'moment';
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import { useStore } from '../../store/index';
@@ -66,6 +66,12 @@ let columns: any[] = [
     render: status =>  <Tag color= { ORDERCOLOR[status]}>{ ORDERSTATUS[status] }</Tag>
   },
   {
+    title: '结算状态',
+    dataIndex: 'payStatus',
+    width: 100,
+    render: payStatus =>  <Tag color= { ORDERCOLOR[payStatus]}>{ PAYSTATUS[payStatus] }</Tag>
+  },
+  {
     title: '订单金额',
     dataIndex: 'totalAmount',
     width: 200
@@ -78,7 +84,7 @@ const Order = () => {
     diningId:'',
     orderNo: '',
     supplierId: '',
-    status: '',
+    payStatus: '',
   });
   const { data, loading, run: fetchList, pagination } = useRequest((params) => ({
     url: `/api/order/all`,
@@ -111,10 +117,10 @@ const Order = () => {
       width: 200,
       fixed: 'right',
       render: (_, row) => {
-        const { run } = useRequest((params) => ({
+        const { run } = useRequest( data => ({
           url: `/api/order/status`,
           method: 'post',
-          params,
+          data,
         }),{
           manual:true
         })
@@ -123,6 +129,7 @@ const Order = () => {
             status: 2,
             orderNo:row.orderNo
           }).then(() => {
+            message.success('成功', 2)
             fetchList(null);
           })
         }
@@ -185,12 +192,12 @@ const Order = () => {
   ]
   useEffect(()=>{
     if ( role === 1) {
-      columns = [diningCol[0], diningCol[1], ...columns, diningCol[1]]
+      columns = [diningCol[0], diningCol[1], ...columns, diningCol[2]]
     } else if (role === 2){
-      columns = [supplierCol[0], supplierCol[1],  ...columns, supplierCol[1]]
+      columns = [supplierCol[0], supplierCol[1],  ...columns, supplierCol[2]]
     }
     return () => {
-      columns = columns.slice(2, -1)
+      if (columns.length > 11)columns = columns.slice(2, -1)
     }
   },[])
   return( 
@@ -229,10 +236,11 @@ const Order = () => {
         }
 
         <Select 
-          style={{ width: 120, marginLeft:10 }} 
+          style={{ width: 120, marginLeft:10 }}
+          allowClear={ true } 
           onChange={ value => setQuery({
             ...query,
-            status: value as any
+            payStatus: value as any
           })}
           placeholder="订单状态"
         >
