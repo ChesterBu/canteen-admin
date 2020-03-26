@@ -34,17 +34,7 @@ const columns = [
     dataIndex: 'status',
     width: 200,
     render: status =>  <Tag color= { STATUSCOLOR[status]}>{ STATUS[status] }</Tag>
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    width: 200,
-    render: (_, record) => (
-      <span>
-        { record.status === 1 && <a style={{ marginRight: 16 }}>删除</a> }
-      </span>
-    ),
-  },
+  }
 ];
 
 
