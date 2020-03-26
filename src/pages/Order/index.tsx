@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './index.less';
 import useRequest from '@umijs/use-request';
-import { Table, Tag, Button, Popconfirm, InputNumber, Row, Col, Input } from 'antd';
+import { Table, Tag, Button, Popconfirm, InputNumber, Row, Col, Input, Select } from 'antd';
 import { ORDERSTATUS, ORDERCOLOR } from '../../const';
 import moment from 'moment';
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import { useStore } from '../../store/index';
 const { Search } = Input 
-
+const { Option } = Select
 
 
 let columns: any[] = [
@@ -74,16 +74,21 @@ let columns: any[] = [
 
 const Order = () => {
   const { role } = useStore();
-  const [ orderNo, setOrderNo ] = useState('');
+  const [ query, setQuery ] = useState({
+    diningId:'',
+    orderNo: '',
+    supplierId: '',
+    status: '',
+  });
   const { data, loading, run: fetchList, pagination } = useRequest((params) => ({
     url: `/api/order/all`,
     method: 'get',
     params:{
       ...params,
-      orderNo,
+      ...query,
     },
   }),{
-    refreshDeps:[ orderNo ],
+    refreshDeps:[ query ],
     paginated: true,
     formatResult: (res) => res.data,
   })
@@ -94,6 +99,12 @@ const Order = () => {
       dataIndex: 'diningDto',
       width: 200,
       render: diningDto => <a>{ diningDto.name }</a>,
+    },
+    {
+      title: '食堂id',
+      dataIndex: 'diningDto',
+      width: 200,
+      render: diningDto => <a>{ diningDto.id }</a>,
     },
     {
       title: '操作',
@@ -127,6 +138,12 @@ const Order = () => {
       dataIndex: 'supplierDto',
       width: 200,
       render: supplierDto => <a>{ supplierDto.name }</a>,
+    },
+    {
+      title: '供应商id',
+      dataIndex: 'supplierDto',
+      width: 200,
+      render: supplierDto => <a>{ supplierDto.id }</a>,
     },
     {
       title: '操作',
@@ -168,23 +185,60 @@ const Order = () => {
   ]
   useEffect(()=>{
     if ( role === 1) {
-      columns = [diningCol[0], ...columns, diningCol[1]]
+      columns = [diningCol[0], diningCol[1], ...columns, diningCol[1]]
     } else if (role === 2){
-      columns = [supplierCol[0], ...columns, supplierCol[1]]
+      columns = [supplierCol[0], supplierCol[1],  ...columns, supplierCol[1]]
     }
     return () => {
-      columns = columns.slice(1, -1)
+      columns = columns.slice(2, -1)
     }
   },[])
   return( 
     <div className="page-content">
       <Row style={ { marginBottom: 16 } }>
         <Col  flex="auto">
+        <Search
+              placeholder="输入订单号查找"
+              onSearch={ value => setQuery({
+                ...query,
+                orderNo: value
+              }) }
+              style={{ width: 200, marginLeft:10 }}
+        />
+        {
+          role === 2 && 
           <Search
-              placeholder="输入订单名称查找"
-              onSearch={ value => setOrderNo(value) }
-              style={{ width: 200 }}
+            placeholder="输入食堂ID查找"
+            onSearch={ value => setQuery({
+              ...query,
+              diningId: value
+            })}
+            style={{ width: 200, marginLeft:10 }}
           />
+        }
+        {
+          role === 1 &&  
+          <Search
+            placeholder="输入供应商ID查找"
+            onSearch={ value => setQuery({
+              ...query,
+              supplierId: value
+            }) }
+            style={{ width: 200, marginLeft:10}}
+          />
+        }
+
+        <Select 
+          style={{ width: 120, marginLeft:10 }} 
+          onChange={ value => setQuery({
+            ...query,
+            status: value as any
+          })}
+          placeholder="订单状态"
+        >
+          <Option value={ 1 }>未结算</Option>
+          <Option value={ 2 }>已结算</Option>
+        </Select>
         </Col>
       </Row>
       <Table

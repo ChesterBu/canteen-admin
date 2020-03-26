@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import './index.less';
-import { Table, InputNumber, Popconfirm, message } from 'antd';
+import { Table, InputNumber, Popconfirm, message, Input } from 'antd';
 import { columns, supplierCol } from '../Inventory/index';
 import useRequest from '@umijs/use-request';
 import { CheckCircleTwoTone } from '@ant-design/icons';
-
+const { Search } = Input
 
 const diningCol = [
   {
@@ -62,18 +62,32 @@ const diningCol = [
 
 
 const Goods = () => {
-  const { data, loading } = useRequest((params) => ({
+  const [ goodName, setGoodName ] = useState('');
+  const { data, loading, pagination } = useRequest((params) => ({
     url: `/api/good/supplier/all`,
     method: 'get',
-    params,
-  }))
+    params:{
+      ...params,
+      goodName
+    },
+  }),{
+    paginated: true,
+    refreshDeps:[goodName],
+    formatResult: (res) => res.data,
+  })
   return( 
     <div className="page-content">
+      <Search
+          placeholder="输入物资名称查找"
+          onSearch={ value => setGoodName(value) }
+          style={{ width: 200, marginBottom:10 }}
+      />
       <Table
         rowKey={ (_,index) => index }
         loading={ loading } 
         columns={ columns.concat(supplierCol, diningCol as any ) }
-        dataSource = { data?.data?.data } 
+        dataSource = { data?.data } 
+        pagination = { pagination }
       />
     </div>
   )

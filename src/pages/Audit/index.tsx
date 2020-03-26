@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './index.less';
 import useRequest from '@umijs/use-request';
-import { Table, Tag, Button, Row, Col, notification, message } from 'antd';
+import { Table, Tag, Button, Row, Col, notification, message, Input, Select} from 'antd';
 import { ORDERSTATUS, ORDERCOLOR } from '../../const';
 import moment from 'moment';
+const { Search } = Input;
+const { Option } = Select;
 
 enum PAYSTATUS {
   '未结算' = 1,
@@ -11,6 +13,30 @@ enum PAYSTATUS {
 }
 
 const columns: any[] = [
+  {
+    title: '食堂名称',
+    dataIndex: 'diningDto',
+    width: 200,
+    render: diningDto => <span>{ diningDto.name }</span>,
+  },
+  {
+    title: '食堂id',
+    dataIndex: 'diningDto',
+    width: 200,
+    render: diningDto => <span>{ diningDto.id }</span>,
+  },
+  {
+    title: '供应商名称',
+    dataIndex: 'supplierDto',
+    width: 200,
+    render: supplierDto => <span>{ supplierDto.name }</span>,
+  },
+  {
+    title: '供应商id',
+    dataIndex: 'supplierDto',
+    width: 200,
+    render: supplierDto => <span>{ supplierDto.id }</span>,
+  },
   {
     title: '订单编号',
     dataIndex: 'orderNo',
@@ -87,11 +113,24 @@ const rowSelection = {
 };
 
 const Audit = () => {
-  const { data, loading, run } = useRequest(params => ({
+  const [ query, setQuery ] = useState({
+    diningId:'',
+    orderNo: '',
+    supplierId: '',
+    status: '',
+  });
+  const { data, loading, run,pagination } = useRequest(params => ({
     url: `/api/order/all`,
     method: 'get',
-    params,
-  }))
+    params:{
+      ...params,
+      ...query,
+    },
+  }),{
+    paginated:true,
+    refreshDeps:[ query ],
+    formatResult: (res) => res.data,
+  })
   const {  run: pay } = useRequest(params => ({
     url: `/api/order/pay`,
     method: 'put',
@@ -99,7 +138,6 @@ const Audit = () => {
   }),{
     manual: true
   })
-
   const [ number, setNumber] = useState(0)
   const [ selectedRows, setSelect ] = useState([])
   const onChange = (_, selectedRows: any[]) => {
@@ -121,6 +159,43 @@ const Audit = () => {
   }
   return( 
     <div className="page-content">
+      <Row className="query">
+        <Search
+              placeholder="输入订单号查找"
+              onSearch={ value => setQuery({
+                ...query,
+                orderNo: value
+              }) }
+              style={{ width: 200, marginLeft:10 }}
+        />
+        <Search
+              placeholder="输入食堂ID查找"
+              onSearch={ value => setQuery({
+                ...query,
+                diningId: value
+              })}
+              style={{ width: 200, marginLeft:10 }}
+        />
+        <Search
+              placeholder="输入供应商ID查找"
+              onSearch={ value => setQuery({
+                ...query,
+                supplierId: value
+              }) }
+              style={{ width: 200, marginLeft:10}}
+        />
+        <Select 
+          style={{ width: 120, marginLeft:10 }} 
+          onChange={ value => setQuery({
+            ...query,
+            status: value as any
+          })}
+          placeholder="结算状态"
+        >
+          <Option value={ 1 }>未结算</Option>
+          <Option value={ 2 }>已结算</Option>
+        </Select>
+      </Row>
       <Row className="query">
         <Col  flex="auto">
           <h1>
@@ -149,7 +224,8 @@ const Audit = () => {
         loading={ loading } 
         columns={ columns }
         scroll={{ x: 1300 }}
-        dataSource = { data?.data?.data } 
+        pagination = { pagination }
+        dataSource = { data?.data } 
       />
     </div>
   )
