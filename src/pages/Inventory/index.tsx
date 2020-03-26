@@ -51,25 +51,12 @@ export const supplierCol = [
   },
 ]
 
-const actionCol = [
-  {
-    title: '操作',
-    dataIndex: 'action',
-    width: 200,
-    render: (_) => (
-      <span>
-        <a style={{ marginRight: 16 }}>删除</a>
-      </span>
-    ),
-  }
-]
-
-const InventoryAdd = memo<{ visible:boolean, toggle: Function, refresh: Function }>(( { visible, toggle, refresh } ) => {
+const InventoryAdd = memo<{ visible: boolean, toggle: Function, refresh: Function, create: boolean  }>(( { visible, toggle, refresh, create } ) => {
   const { role } = useStore()
   const [ form ] = Form.useForm();
   const { run } = useRequest(data => ({
-    url: `/api/good/${ROLEMAP[role]}/add`,
-    method: 'post',
+    url: `/api/good/${ROLEMAP[role]}`,
+    method: create ? 'post' : 'put',
     data,
   }),{
     manual:true
@@ -124,6 +111,9 @@ const InventoryAdd = memo<{ visible:boolean, toggle: Function, refresh: Function
         form = { form }
         onFinish={ onFinish }
       >
+        {
+          create && 
+          <>
           {
             role === 2 &&
             <Form.Item
@@ -162,6 +152,8 @@ const InventoryAdd = memo<{ visible:boolean, toggle: Function, refresh: Function
           >
             <Input disabled={ role ===2 } />
           </Form.Item>
+        </>
+        }
           {
             role === 2 &&
             <>
@@ -191,6 +183,7 @@ const InventoryList = () => {
   const { role } = useStore()
   const [ goodName, setGoodName ] = useState('');
   const [ goodNo, setGoodNo ] = useState('');
+  const [ create, toggleMode ] = useState(true)
   const { data, loading, run, pagination } = useRequest((params) => ({
     url: `/api/good/${ROLEMAP[role]}/all`,
     method: 'get',
@@ -204,7 +197,33 @@ const InventoryList = () => {
     paginated: true,
     formatResult: (res) => res.data,
   })
+  const { run: remove } = useRequest((goodNo) => ({
+    url: `/api/good/${ROLEMAP[role]}/remove/${goodNo}`,
+    method: 'delete',
+  }),{
+    manual:true
+  })
   const [ visible, toggle] = useState(false)
+  const actionCol = [
+    {
+      title: '操作',
+      dataIndex: 'action',
+      width: 200,
+      render: (_,record) =>{
+        return (
+          <span>
+            <a style={{ marginRight: 16 }} onClick ={ () => remove(record.goodNo).then(() => run(null)) }>删除</a>
+            { role === 2 &&  <a style={{ marginRight: 16 }} onClick ={ 
+                () => {
+                  toggleMode(false)
+                  toggle(true)
+                }
+            }>修改</a> }
+          </span>
+        )
+      } 
+    }
+  ]
   return(
     <>
       <Row style={ { marginBottom: 16 } }>
@@ -232,11 +251,16 @@ const InventoryList = () => {
       <Table
         rowKey={ (_,index) => index }
         loading={ loading } 
-        columns={ columns.concat(role === 2 ? supplierCol : [],actionCol) }
+        columns={ columns.concat(role === 2 ? supplierCol : [], actionCol as any) }
         dataSource = { data?.data } 
         pagination = { pagination }
       />
-      <InventoryAdd  visible = { visible } toggle = { toggle } refresh = { run } />
+      <InventoryAdd  
+        visible = { visible } 
+        toggle = { toggle } 
+        refresh = { run } 
+        create = { create }
+      />
     </>
   )
 }
