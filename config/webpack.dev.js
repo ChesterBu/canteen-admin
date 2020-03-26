@@ -20,7 +20,7 @@ module.exports = merge(commonConfig, {
         target: 'http://192.168.2.160:8080',
         changeOrigin: true,
         secure: false,
-        pathRewrite: { '^/api': '' },
+        // pathRewrite: { '^/api': '' },
       },
     },
   },

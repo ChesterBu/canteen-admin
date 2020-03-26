@@ -9,23 +9,23 @@ const { Search } = Input;
 
 const columns = [
   {
-    title: 'account',
+    title: '账号',
     dataIndex: 'account',
     width: 200
   },
   {
-    title: 'depentmentId',
+    title: '部门编号',
     dataIndex: 'depentmentId',
     width: 200,
   },
   {
-    title: 'depent',
+    title: '部门名称',
     dataIndex: 'depent',
     width: 200,
     render: depent => <a>{ depent.name }</a>,
   },
   {
-    title: 'principalMan',
+    title: '负责人',
     dataIndex: 'principalMan',
     width: 200,
   },
@@ -42,7 +42,7 @@ const tables = ['食堂','供应商','财务部']
 
 const InfoPane = ({ name, i }) => {
   const [ account, setAccount ] = useState('');
-  const { data, loading, pagination } = useRequest((params) => ({
+  const { data, loading, pagination, run:fetch } = useRequest((params) => ({
     url: '/api/admin/account/all',
     method: 'get',
     params:{
@@ -56,6 +56,31 @@ const InfoPane = ({ name, i }) => {
     defaultPageSize: 15,
     formatResult: (res) => res.data,
   })
+  const actionCol = [
+    {
+      title: '操作',
+      width: 200,
+      fixed: 'right',
+      render: (_, row) => {
+        const { run } = useRequest( data => ({
+          url: `/api/admin/ban`,
+          method: 'post',
+          data,
+        }),{
+          manual:true
+        })
+        return (
+           <a onClick={ () => run({
+              dep: i + 1,
+              depId: row.depentmentId,
+           }).then(()=>fetch(null))}
+           >
+             删除
+          </a>
+        )
+      }
+    },
+  ]
   const history = useHistory()
   return(
     <>
@@ -79,7 +104,7 @@ const InfoPane = ({ name, i }) => {
       <Table
         rowKey={ (_,index) => index }
         loading={ loading } 
-        columns={ columns }
+        columns={ columns.concat(actionCol as any) }
         pagination = { pagination }
         dataSource = { data?.data }
       />
