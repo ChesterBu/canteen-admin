@@ -87,7 +87,7 @@ const Order = () => {
     payStatus: '',
   });
   const { data, loading, run: fetchList, pagination } = useRequest((params) => ({
-    url: `/api/order/all`,
+    url: `/management/api/order/all`,
     method: 'get',
     params:{
       ...params,
@@ -118,7 +118,7 @@ const Order = () => {
       fixed: 'right',
       render: (_, row) => {
         const { run } = useRequest( data => ({
-          url: `/api/order/status`,
+          url: `/management/api/order/status`,
           method: 'post',
           data,
         }),{
@@ -159,7 +159,7 @@ const Order = () => {
       render: (_, row) => {
         const [ realRecive, setRecive ] = useState(1)
         const { run } = useRequest( data => ({
-          url: `/api/order/status`,
+          url: `/management/api/order/status`,
           method: 'post',
           data,
         }),{

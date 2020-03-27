@@ -43,7 +43,7 @@ const tables = ['食堂','供应商','财务部']
 const InfoPane = ({ name, i }) => {
   const [ account, setAccount ] = useState('');
   const { data, loading, pagination, run:fetch } = useRequest((params) => ({
-    url: '/api/admin/account/all',
+    url: '/management/api/admin/account/all',
     method: 'get',
     params:{
       ...params,
@@ -63,7 +63,7 @@ const InfoPane = ({ name, i }) => {
       fixed: 'right',
       render: (_, row) => {
         const { run } = useRequest( data => ({
-          url: `/api/admin/ban`,
+          url: `/management/api/admin/ban`,
           method: 'post',
           data,
         }),{

@@ -12,7 +12,7 @@ import useRequest from '@umijs/use-request';
 function Password({ visible, toggle }) {
   const [ form ] = Form.useForm();
   const { run } = useRequest(data =>({
-    url: '/api/user/password',
+    url: '/management/api/user/password',
     method: 'put',
     data
   }),{ 
@@ -115,7 +115,7 @@ const Logout = ({ run, history }) => {
 const MainHeader = () => {
     const store = useStore();
     const history = useHistory()
-    const { run } = useRequest('/api/user/logout',{
+    const { run } = useRequest('/management/api/user/logout',{
         manual: true,
     });
     return useObserver( ()=> (
