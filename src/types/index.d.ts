@@ -7,6 +7,4 @@ declare global {
     }
 }
 
-export {
-    Res
-}
+export {}
