@@ -81,8 +81,7 @@ const InventoryAdd = memo<{ visible: boolean, toggle: Function,create: boolean, 
     if (res.ret) {
       if(create){
         notification.success({
-          message:`物资:${value.goodName}添加成功`,
-          description: `编号为${res.data}`,
+          message:`物资添加成功`
         });
       }
       toggle(false)
@@ -249,7 +248,10 @@ const InventoryList = () => {
         <Col  flex="88px">
           <Button
             type="primary" 
-            onClick ={ () => { toggle(true) } }
+            onClick ={ () => { 
+              toggleMode(true);
+              toggle(true)
+            } }
           > 
             添加物资信息
           </Button>

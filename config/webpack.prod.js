@@ -10,6 +10,7 @@ const config = merge(commonConfig, {
   plugins: [
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
+      publicPath:'/management',
       filename: "[name].[contenthash:8].css",
       chunkFilename: "chunk/[id].[contenthash:8].css",
     }),

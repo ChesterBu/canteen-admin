@@ -8,7 +8,7 @@ export const useCookie = (): TUser => {
         value[result[1]] = result[2];
     }
     return {
-        account: value['principalMan'],
+        account: decodeURI(value['principalMan']),
         role: Number(value['user_role']) as any 
     }
 }
