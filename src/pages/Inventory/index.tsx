@@ -55,14 +55,14 @@ const InventoryAdd = memo<{ visible: boolean, toggle: Function,create: boolean, 
   const { role } = useStore()
   const [ form ] = Form.useForm();
   const { run } = useRequest(data => ({
-    url: `/management/api/good/${ROLEMAP[role]}`,
+    url: `/api/good/${ROLEMAP[role]}`,
     method: create ? 'post' : 'put',
     data,
   }),{
     manual:true
   })
   const { data, run: getGood, loading } = useRequest(params => ({
-    url: `/management/api/good/admin/all`,
+    url: `/api/good/admin/all`,
     method: 'get',
     params,
   }),{
@@ -188,7 +188,7 @@ const InventoryList = () => {
   const [ modeId, setModeId ] = useState('')
   const [ visible, toggle] = useState(false)
   const { data, loading, run, pagination } = useRequest((params) => ({
-    url: `/management/api/good/${ROLEMAP[role]}/all`,
+    url: `/api/good/${ROLEMAP[role]}/all`,
     method: 'get',
     params:{
       ...params,
@@ -204,7 +204,7 @@ const InventoryList = () => {
     !visible && run(null)
   },[visible])
   const { run: remove } = useRequest((goodNo) => ({
-    url: `/management/api/good/${ROLEMAP[role]}/remove/${goodNo}`,
+    url: `/api/good/${ROLEMAP[role]}/remove/${goodNo}`,
     method: 'delete',
   }),{
     manual:true

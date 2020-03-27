@@ -1,5 +1,5 @@
 module.exports = (app) => {
-	app.get('/management/api/user/logout', (req, res) => {
+	app.get('/api/user/logout', (req, res) => {
 		res.json({
 			errorCode: 1,
 			errorMsg: '',
@@ -7,7 +7,7 @@ module.exports = (app) => {
 			ret: true,
 		});
 	});
-	app.post('/management/api/user/login', (req, res) => {
+	app.post('/api/user/login', (req, res) => {
 		res.json({
 			errorCode: 1,
 			errorMsg: '',
@@ -17,7 +17,7 @@ module.exports = (app) => {
 			ret: true,
 		})
 	});
-	app.get('/management/api/:type/info', (req, res) => {
+	app.get('/api/:type/info', (req, res) => {
 		res.json({
 			errorCode: 1,
 			errorMsg: '',

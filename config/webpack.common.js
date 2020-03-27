@@ -12,7 +12,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, '../dist'),
     filename: '[name].[chunk:8].js',
-    publicPath: "/management",
+    publicPath: "/",
     chunkFilename: 'chunk/[name].[chunkhash:8].js',
   },
   module: {

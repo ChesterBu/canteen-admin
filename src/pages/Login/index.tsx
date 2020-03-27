@@ -13,7 +13,7 @@ const LoginPage:SFC = () => {
     const history = useHistory()
     const store = useStore()
     const { loading, run } = useRequest(( data ) => ({
-        url: '/management/api/user/login',
+        url: '/api/user/login',
         method: 'post',
         data
     }), {

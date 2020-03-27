@@ -274,7 +274,7 @@ const Access = () => {
   const [ form ] = Form.useForm();
   const confirm =  useCallback(() => form.submit(),[ form ])
   const { run, loading } = useRequest(data => ({
-    url: `/management/api/admin/${role2Api[role]}`,
+    url: `/api/admin/${role2Api[role]}`,
     method: 'post',
     data,
   }),{

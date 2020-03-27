@@ -16,11 +16,11 @@ module.exports = merge(commonConfig, {
     compress: true,
     // before: (app) => mock(app),
     proxy: {
-      '/management/api/*': {
+      '/api/*': {
         target: 'http://192.168.2.160:8080',
         changeOrigin: true,
         secure: false,
-        // pathRewrite: { '^/management/api': '' },
+        // pathRewrite: { '^/api': '' },
       },
     },
   },

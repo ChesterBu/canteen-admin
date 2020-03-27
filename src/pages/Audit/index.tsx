@@ -118,7 +118,7 @@ const Audit = () => {
     status: '',
   });
   const { data, loading, run, pagination } = useRequest(params => ({
-    url: `/management/api/order/all`,
+    url: `/api/order/all`,
     method: 'get',
     params:{
       ...params,
@@ -130,7 +130,7 @@ const Audit = () => {
     formatResult: (res) => res.data,
   })
   const {  run: pay } = useRequest(params => ({
-    url: `/management/api/order/pay`,
+    url: `/api/order/pay`,
     method: 'put',
     params,
   }),{

@@ -10,7 +10,6 @@ const config = merge(commonConfig, {
   plugins: [
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
-      publicPath:'/management',
       filename: "[name].[contenthash:8].css",
       chunkFilename: "chunk/[id].[contenthash:8].css",
     }),
@@ -29,7 +28,7 @@ const config = merge(commonConfig, {
       cacheGroups: {
         dll: {
           test: /[\\/]node_modules[\\/](react|react-dom|react-dom-router|babel-polyfill|mobx|mobx-react|mobx-react-dom|antd|@ant-design)/,
-          minChunks: 1,
+          minChunks: 2,
           priority: 2,
           name: "dll",
         },

@@ -24,7 +24,7 @@ const diningCol = [
     render: (_, record) => {
       const [ quantity, setQuantity ] = useState(1)
       const { run } = useRequest((data) =>({
-        url: '/management/api/dining/order',
+        url: '/api/dining/order',
         method: 'post',
         data
       }),{
@@ -64,7 +64,7 @@ const diningCol = [
 const Goods = () => {
   const [ goodName, setGoodName ] = useState('');
   const { data, loading, pagination } = useRequest((params) => ({
-    url: `/management/api/good/supplier/all`,
+    url: `/api/good/supplier/all`,
     method: 'get',
     params:{
       ...params,
