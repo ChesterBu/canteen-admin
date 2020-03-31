@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import './index.less';
 import useRequest from '@umijs/use-request';
-import { Table, Tag, Button, Popconfirm, InputNumber, Row, Col, Input, Select, message } from 'antd';
+import { Table, Tag, Button, Popconfirm, InputNumber, Row, Col, Input, Select, DatePicker, message } from 'antd';
 import { ORDERSTATUS, ORDERCOLOR, PAYSTATUS } from '../../const';
 import moment from 'moment';
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import { useStore } from '../../store/index';
 const { Search } = Input 
 const { Option } = Select
-
+const { RangePicker } = DatePicker;
 
 let columns: any[] = [
   {
@@ -85,6 +85,8 @@ const Order = () => {
     orderNo: '',
     supplierId: '',
     payStatus: '',
+    beginTime:'',
+    endTime:''
   });
   const { data, loading, run: fetchList, pagination } = useRequest((params) => ({
     url: `/api/order/all`,
@@ -247,6 +249,11 @@ const Order = () => {
           <Option value={ 1 }>未结算</Option>
           <Option value={ 2 }>已结算</Option>
         </Select>
+        <RangePicker onChange={ (_, dateStrings) => setQuery({
+          ...query,
+          beginTime: dateStrings[0],
+          endTime: dateStrings[1]
+        }) } style={{ width: 300, marginLeft:10 }} />
         </Col>
       </Row>
       <Table

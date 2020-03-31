@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './index.less';
 import useRequest from '@umijs/use-request';
-import { Table, Tag, Button, Row, Col, notification, message, Input, Select} from 'antd';
+import { Table, Tag, Button, Row, Col, notification, message, Input, Select, DatePicker} from 'antd';
 import { ORDERSTATUS, ORDERCOLOR,PAYSTATUS } from '../../const';
 import moment from 'moment';
 const { Search } = Input;
 const { Option } = Select;
-
+const { RangePicker } = DatePicker;
 
 
 
@@ -116,6 +116,8 @@ const Audit = () => {
     orderNo: '',
     supplierId: '',
     status: '',
+    beginTime:'',
+    endTime: '',
   });
   const { data, loading, run, pagination } = useRequest(params => ({
     url: `/api/order/all`,
@@ -123,6 +125,7 @@ const Audit = () => {
     params:{
       ...params,
       ...query,
+      orderStatus: 3
     },
   }),{
     paginated:true,
@@ -195,6 +198,11 @@ const Audit = () => {
           <Option value={ 1 }>未结算</Option>
           <Option value={ 2 }>已结算</Option>
         </Select>
+        <RangePicker onChange={ (_, dateStrings) => setQuery({
+          ...query,
+          beginTime: dateStrings[0],
+          endTime: dateStrings[1]
+        }) } style={{ width: 300, marginLeft:10 }} />
       </Row>
       <Row className="query">
         <Col  flex="auto">

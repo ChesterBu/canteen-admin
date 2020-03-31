@@ -64,7 +64,10 @@ const InventoryAdd = memo<{ visible: boolean, toggle: Function,create: boolean, 
   const { data, run: getGood, loading } = useRequest(params => ({
     url: `/api/good/admin/all`,
     method: 'get',
-    params,
+    params:{
+      ...params,
+      status: 1
+    },
   }),{
     debounceInterval: 500,
     manual: true,
@@ -72,7 +75,7 @@ const InventoryAdd = memo<{ visible: boolean, toggle: Function,create: boolean, 
   })
   const getGoodInfo = value => {
       getGood({
-        goodNo:value
+        goodName:value
       })
   }
   const onFinish = async value =>{
@@ -127,6 +130,7 @@ const InventoryAdd = memo<{ visible: boolean, toggle: Function,create: boolean, 
                 defaultActiveFirstOption = { false }
                 showArrow = { false }
                 filterOption = { false }
+                placeholder="请输入编号/物资"
                 onSearch = { getGoodInfo }
                 onChange = { setForm as any }
                 optionLabelProp = "key"
@@ -134,7 +138,7 @@ const InventoryAdd = memo<{ visible: boolean, toggle: Function,create: boolean, 
                 notFoundContent={ null }
               >
                 { 
-                  data?.data?.map(d => <Option key={ d.goodNo } value={ d.goodNo } data= { d } >{ d.goodNo }</Option>)
+                  data?.data?.map(d => <Option key={ d.goodNo } value={ d.goodNo } data= { d } >{ d.goodNo + ' ' + d.goodName }</Option>)
                 }
               </Select>
             </Form.Item>
@@ -183,7 +187,7 @@ const InventoryAdd = memo<{ visible: boolean, toggle: Function,create: boolean, 
 const InventoryList = () => {
   const { role } = useStore()
   const [ goodName, setGoodName ] = useState('');
-  const [ goodNo, setGoodNo ] = useState('');
+  const [ status, setStatus ] = useState(0);
   const [ create, toggleMode ] = useState(true)
   const [ modeId, setModeId ] = useState('')
   const [ visible, toggle] = useState(false)
@@ -193,10 +197,10 @@ const InventoryList = () => {
     params:{
       ...params,
       goodName,
-      goodNo
+      status
     },
   }),{
-    refreshDeps:[ goodName, goodNo ],
+    refreshDeps:[ goodName, status ],
     paginated: true,
     formatResult: (res) => res.data,
   })
@@ -235,15 +239,19 @@ const InventoryList = () => {
       <Row style={ { marginBottom: 16 } }>
         <Col  flex="auto">
           <Search
-              placeholder="输入物资名称查找"
+              placeholder="输入编号/名称查找"
               onSearch={ value => setGoodName(value) }
               style={{ width: 200 }}
           />
-          <Search
-              placeholder="输入物资编号查找"
-              onSearch={ value => setGoodNo(value) }
-              style={{ width: 200, marginLeft: 20 }}
-          />
+          <Select 
+            style={{ width: 120, marginLeft:10 }}
+            allowClear={ true } 
+            onChange={ value => setStatus(value as number)}
+            placeholder="订单状态"
+          >
+            <Option value={ 1 }>正常</Option>
+            <Option value={ 2 }>删除</Option>
+          </Select>
         </Col>
         <Col  flex="88px">
           <Button

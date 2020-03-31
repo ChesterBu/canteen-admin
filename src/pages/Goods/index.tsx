@@ -78,7 +78,7 @@ const Goods = () => {
   return( 
     <div className="page-content">
       <Search
-          placeholder="输入物资名称查找"
+          placeholder="输入名称/编号查找"
           onSearch={ value => setGoodName(value) }
           style={{ width: 200, marginBottom:10 }}
       />

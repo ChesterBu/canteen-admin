@@ -90,7 +90,7 @@ const InfoPane = ({ name, i }) => {
             placeholder="输入账号查找"
             onSearch={ value => setAccount(value) }
             style={{ width: 200 }}
-          />
+        />
         </Col>
         <Col  flex="88px">
           <Button
