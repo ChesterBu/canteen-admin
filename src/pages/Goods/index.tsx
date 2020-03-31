@@ -24,7 +24,7 @@ const diningCol = [
     render: (_, record) => {
       const [ quantity, setQuantity ] = useState(1)
       const { run } = useRequest((data) =>({
-        url: '/api/dining/order',
+        url: '/api/order/dining',
         method: 'post',
         data
       }),{
