@@ -272,12 +272,15 @@ const InventoryList = () => {
         dataSource = { data?.data } 
         pagination = { pagination }
       />
-      <InventoryAdd  
-        visible = { visible } 
-        toggle = { toggle } 
-        create = { create }
-        goodNo = { modeId }
-      />
+      {
+        visible &&
+        <InventoryAdd  
+          visible = { visible } 
+          toggle = { toggle } 
+          create = { create }
+          goodNo = { modeId }
+        />
+      }
     </>
   )
 }
